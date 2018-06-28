@@ -123,10 +123,10 @@ func (c *Curl) SetUrl(url string) {
 	c.Url = url
 }
 //增加头信息
-func (c *Curl) AddHeaders(k,v string) {
+func (c *Curl) AddHeader(k,v string) {
 	c.Request.Header.Add(k,v)
 }
 //设置头信息
-func (c *Curl) SetHeaders(k,v string) {
+func (c *Curl) SetHeader(k,v string) {
 	c.Request.Header.Set(k,v)
 }
