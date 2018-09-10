@@ -1,12 +1,11 @@
 package trace
 
 import (
-	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"github.com/uber/jaeger-client-go"
-	"github.com/uber/jaeger-lib/metrics"
+	jaegercfg "github.com/uber/jaeger-client-go/config"
 	jaegerlog "github.com/uber/jaeger-client-go/log"
-	"github.com/xiaomeng79/go-log"
-	"context"
+	"github.com/uber/jaeger-lib/metrics"
+	"log"
 	"io"
 )
 
@@ -30,7 +29,7 @@ func TraceingInit(address,servicename string ) io.Closer {
 
 	sender, err := jaeger.NewUDPTransport(address, 0)
 	if err != nil {
-		log.Info(context.Background(),"could not initialize jaeger sender: "+err.Error())
+		log.Println("could not initialize jaeger sender: "+err.Error())
 		return nil
 	}
 
@@ -45,7 +44,7 @@ func TraceingInit(address,servicename string ) io.Closer {
 	)
 
 	if err != nil {
-		log.Info(context.Background(),"could not initialize jaeger tracer: "+err.Error())
+		log.Println("could not initialize jaeger tracer: "+err.Error())
 		return nil
 	}
 	return closer
