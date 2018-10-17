@@ -2,9 +2,9 @@
 package random
 
 import (
-	"time"
-	"math/rand"
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 //获取n位随机字符串
@@ -19,10 +19,9 @@ func GetRandomString(leng int) string {
 	return string(result)
 }
 
-
 /**
 返回8位随机数
- */
+*/
 func EightBitRand() string {
 	_rand := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return fmt.Sprintf("%08d", _rand.Int31n(100000000))

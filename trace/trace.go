@@ -1,25 +1,26 @@
 package trace
+
 import (
-"context"
-"github.com/opentracing/opentracing-go"
-"github.com/micro/go-micro/metadata"
-"net/http"
-"strings"
-"fmt"
+	"context"
+	"fmt"
+	"github.com/micro/go-micro/metadata"
+	"github.com/opentracing/opentracing-go"
+	"net/http"
+	"strings"
 )
 
 //记录tag
-func tag(ctx context.Context,sp opentracing.Span) (context.Context,opentracing.Span) {
+func tag(ctx context.Context, sp opentracing.Span) (context.Context, opentracing.Span) {
 	ctx = opentracing.ContextWithSpan(ctx, sp)
 
 	//加tag
-	s := strings.Split(fmt.Sprintf("%v",sp),":")
-	if len(s) >=3 {
+	s := strings.Split(fmt.Sprintf("%v", sp), ":")
+	if len(s) >= 3 {
 		sp.SetTag("trace_id", s[0])
 		sp.SetTag("span_id", s[1])
 		sp.SetTag("parent_id", s[2])
 	}
-	return ctx,sp
+	return ctx, sp
 }
 
 func traceIntoContextByGlobalTracer(ctx context.Context, tracer opentracing.Tracer, name string) (context.Context, opentracing.Span, error) {
@@ -37,7 +38,7 @@ func traceIntoContextByGlobalTracer(ctx context.Context, tracer opentracing.Trac
 	if err := sp.Tracer().Inject(sp.Context(), opentracing.TextMap, opentracing.TextMapCarrier(md)); err != nil {
 		return nil, nil, err
 	}
-	ctx,sp = tag(ctx,sp)
+	ctx, sp = tag(ctx, sp)
 	ctx = metadata.NewContext(ctx, md)
 	return ctx, sp, nil
 }
@@ -57,7 +58,7 @@ func traceFromHeaderByGlobalTracer(ctx context.Context, tracer opentracing.Trace
 	if err := sp.Tracer().Inject(sp.Context(), opentracing.TextMap, opentracing.TextMapCarrier(md)); err != nil {
 		return nil, nil, err
 	}
-	ctx,sp = tag(ctx,sp)
+	ctx, sp = tag(ctx, sp)
 	ctx = metadata.NewContext(ctx, md)
 	return ctx, sp, nil
 }
@@ -77,22 +78,21 @@ func traceToHeaderByGlobalTracer(ctx context.Context, tracer opentracing.Tracer,
 	if err := sp.Tracer().Inject(sp.Context(), opentracing.TextMap, opentracing.HTTPHeadersCarrier(header)); err != nil {
 		return nil, nil, err
 	}
-	ctx,sp = tag(ctx,sp)
+	ctx, sp = tag(ctx, sp)
 	return ctx, sp, nil
 }
 
 //opentracing从context获取,写入context，适用RPC
 func TraceIntoContext(ctx context.Context, name string) (context.Context, opentracing.Span, error) {
-	return traceIntoContextByGlobalTracer(ctx,opentracing.GlobalTracer(),name)
+	return traceIntoContextByGlobalTracer(ctx, opentracing.GlobalTracer(), name)
 }
+
 //opentracing从header获取,写入context,适用获取http
 func TraceFromHeader(ctx context.Context, name string, header http.Header) (context.Context, opentracing.Span, error) {
-	return traceFromHeaderByGlobalTracer(ctx,opentracing.GlobalTracer(),name,header)
+	return traceFromHeaderByGlobalTracer(ctx, opentracing.GlobalTracer(), name, header)
 }
+
 //opentracing从context获取,写入http,适用将调用http
 func TraceToHeader(ctx context.Context, name string, header http.Header) (context.Context, opentracing.Span, error) {
-	return traceToHeaderByGlobalTracer(ctx,opentracing.GlobalTracer(),name,header)
+	return traceToHeaderByGlobalTracer(ctx, opentracing.GlobalTracer(), name, header)
 }
-
-
-

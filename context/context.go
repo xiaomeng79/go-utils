@@ -46,6 +46,7 @@ func GetInt64(ctx context.Context, key string) (int64, error) {
 	}
 	return 0, typeError
 }
+
 //取float64的值
 func GetFloat64(ctx context.Context, key string) (float64, error) {
 	if v, ok := ctx.Value(key).(float64); ok {
@@ -53,6 +54,7 @@ func GetFloat64(ctx context.Context, key string) (float64, error) {
 	}
 	return 0.00, typeError
 }
+
 //取出设置的时间值
 func GetTime(ctx context.Context, key string) (time.Time, error) {
 	if v, ok := ctx.Value(key).(time.Time); ok {
@@ -60,6 +62,7 @@ func GetTime(ctx context.Context, key string) (time.Time, error) {
 	}
 	return time.Now(), typeError
 }
+
 //取出字符串slice
 func GetStringSlice(ctx context.Context, key string) ([]string, error) {
 	if v, ok := ctx.Value(key).([]string); ok {
@@ -67,6 +70,7 @@ func GetStringSlice(ctx context.Context, key string) ([]string, error) {
 	}
 	return nil, typeError
 }
+
 //取出key为string，值为interface的值
 func GetStringMap(ctx context.Context, key string) (map[string]interface{}, error) {
 	if v, ok := ctx.Value(key).(map[string]interface{}); ok {
@@ -74,6 +78,7 @@ func GetStringMap(ctx context.Context, key string) (map[string]interface{}, erro
 	}
 	return nil, typeError
 }
+
 //取出mapstring类型的值
 func GetStringMapString(ctx context.Context, key string) (map[string]string, error) {
 	if v, ok := ctx.Value(key).(map[string]string); ok {
@@ -81,4 +86,5 @@ func GetStringMapString(ctx context.Context, key string) (map[string]string, err
 	}
 	return nil, typeError
 }
+
 //可以再扩展,记得加单元测试

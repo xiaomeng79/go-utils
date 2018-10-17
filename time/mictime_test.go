@@ -1,8 +1,8 @@
 package time
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 //测试思路
@@ -15,17 +15,19 @@ var (
 		mic string
 		str string
 	}{
-		{"k1","1528879610000","2018-06-13 16:46:50"},
-		{"k2","1528879610000","2018/06/13 16:46:50"},
-		{"k3","1523021ssssss","2018-06-13 16:46:50"},
-		{"k4","1528879610000","aaaa-bb-cc dd:ee:ff"},
+		{"k1", "1528879610000", "2018-06-13 16:46:50"},
+		{"k2", "1528879610000", "2018/06/13 16:46:50"},
+		{"k3", "1523021ssssss", "2018-06-13 16:46:50"},
+		{"k4", "1528879610000", "aaaa-bb-cc dd:ee:ff"},
 	}
 )
+
 //生成时间戳
 func TestGenMicTime(t *testing.T) {
 	micTime := GenMicTime()
-	assert.Lenf(t,micTime,13,"生成时间格式长度不正确:%d",len(micTime))
+	assert.Lenf(t, micTime, 13, "生成时间格式长度不正确:%d", len(micTime))
 }
+
 //时间戳转字符串
 func TestMicTimeToStr(t *testing.T) {
 	for _, v := range timeValues {

@@ -18,7 +18,7 @@ import (
 //sendTo：接收者，多个逗号隔开
 //subject：发送主题
 //body:发送内容
-func SendEmailTls(host, port,username,nickname, password, sendTo, subject, body string) error {
+func SendEmailTls(host, port, username, nickname, password, sendTo, subject, body string) error {
 	auth := smtp.PlainAuth("", username, password, host)
 	to := strings.Split(strings.Replace(sendTo, "，", ",", -1), ",")
 	user := username

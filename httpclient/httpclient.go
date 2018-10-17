@@ -6,11 +6,13 @@ import (
 	"sync"
 	"time"
 )
+
 //选项
 type Option func(*Options)
 type Options struct {
 	Timeout time.Duration //总体超时时间
 }
+
 //设置超时
 func SetTimeout(timeout time.Duration) Option {
 	return func(o *Options) {
@@ -19,24 +21,23 @@ func SetTimeout(timeout time.Duration) Option {
 }
 
 var (
-	once sync.Once
+	once     sync.Once
 	instance *http.Client
 )
+
 //创建一个单例的http客户端
 func New(opts ...Option) *http.Client {
 	defaultOptions := &Options{
-		Timeout:30 * time.Second,//默认30s超时
+		Timeout: 30 * time.Second, //默认30s超时
 	}
-	for _,opt := range opts {
+	for _, opt := range opts {
 		opt(defaultOptions)
 	}
 	once.Do(func() {
 		instance = &http.Client{
-			Timeout:defaultOptions.Timeout,
-			Transport:http.DefaultTransport,
+			Timeout:   defaultOptions.Timeout,
+			Transport: http.DefaultTransport,
 		}
 	})
 	return instance
 }
-
-

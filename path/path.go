@@ -18,13 +18,8 @@ func PathExists(path string) (bool, error) {
 	return false, err
 }
 
-
 //打开文件，追加模式，如果不存在就创建文件
 func OpenFileOrCreate(filename string) (*os.File, error) {
 
 	return os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_RDWR, os.ModePerm|os.ModeTemporary)
 }
-
-
-
-

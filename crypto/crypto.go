@@ -9,13 +9,11 @@ import (
 	"encoding/hex"
 )
 
-
 //MD5加密
 func MD5(s string) string {
 	r := md5.Sum([]byte(s))
 	return hex.EncodeToString(r[:])
 }
-
 
 //SHA1加密
 func SHA1(s string) string {

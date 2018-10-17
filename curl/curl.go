@@ -1,41 +1,40 @@
 package curl
 
 import (
-	"net/http"
-	"time"
-	"io"
-	"strings"
 	"errors"
 	"github.com/xiaomeng79/go-utils/httpclient"
+	"io"
 	"io/ioutil"
+	"net/http"
+	"strings"
+	"time"
 )
 
 //这些是要记录到日志的东西
 type Curl struct {
-	Method string `json:"method"`
-	Url string `json:"url"`
-	StatusCode int `json:"status"`
-	Delay int64 `json:"delay"`
-	Request *Request `json:"request"`
-	Response *Response `json:"response"`
+	Method     string    `json:"method"`
+	Url        string    `json:"url"`
+	StatusCode int       `json:"status"`
+	Delay      int64     `json:"delay"`
+	Request    *Request  `json:"request"`
+	Response   *Response `json:"response"`
 }
 
 //请求
 type Request struct {
-	Header http.Header
-	Body string
-	ContentType string
+	Header        http.Header
+	Body          string
+	ContentType   string
 	ContentLength int64
 }
 
 //响应
 type Response struct {
-	Header http.Header
-	Body string
-	ContentType string
+	Header        http.Header
+	Body          string
+	ContentType   string
 	ContentLength int64
 }
-
 
 //定义错误
 var (
@@ -49,35 +48,36 @@ type ICurl interface {
 //新建一个curl
 func New() *Curl {
 	req := &Request{
-		Header:make(http.Header),
+		Header: make(http.Header),
 	}
 	res := &Response{
-		Header:make(http.Header),
+		Header: make(http.Header),
 	}
 	return &Curl{
-		Request:req,
-		Response:res,
+		Request:  req,
+		Response: res,
 	}
 }
+
 //注意调用者做异常处理
 func (c *Curl) Do() error {
 	//记录请求时间,毫秒
-	s_time := time.Now().UnixNano()/1e6
+	s_time := time.Now().UnixNano() / 1e6
 	defer func() {
 		c.Delay = time.Now().UnixNano()/1e6 - s_time
 	}()
 	//生成请求内容
 	var input io.Reader
 	switch c.Method {
-	case "GET","OPTIONS","HEAD","TRACE","CONNECT":
+	case "GET", "OPTIONS", "HEAD", "TRACE", "CONNECT":
 		input = nil
-	case "POST","PUT","DELETE":
+	case "POST", "PUT", "DELETE":
 		input = strings.NewReader(c.Request.Body)
-	default :
+	default:
 		return NotAllowMethod
 	}
 	//生成请求
-	req, err := http.NewRequest(c.Method,c.Url,input)
+	req, err := http.NewRequest(c.Method, c.Url, input)
 	if err != nil {
 		return err
 	}
@@ -87,12 +87,12 @@ func (c *Curl) Do() error {
 	//执行请求
 	//1.生成请求客户端
 	hc := httpclient.New()
-	res,err := hc.Do(req)
+	res, err := hc.Do(req)
 	if err != nil {
 		return err
 	}
 	//读取响应体
-	body,err := ioutil.ReadAll(res.Body)
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
@@ -105,6 +105,7 @@ func (c *Curl) Do() error {
 	return nil
 
 }
+
 //设置content-type
 func (c *Curl) SetContentType(contentType string) {
 	c.Request.ContentType = contentType
@@ -114,19 +115,23 @@ func (c *Curl) SetContentType(contentType string) {
 func (c *Curl) SetBody(body string) {
 	c.Request.Body = body
 }
+
 //设置method
 func (c *Curl) SetMethod(method string) {
 	c.Method = method
 }
+
 //设置url
 func (c *Curl) SetUrl(url string) {
 	c.Url = url
 }
+
 //增加头信息
-func (c *Curl) AddHeader(k,v string) {
-	c.Request.Header.Add(k,v)
+func (c *Curl) AddHeader(k, v string) {
+	c.Request.Header.Add(k, v)
 }
+
 //设置头信息
-func (c *Curl) SetHeader(k,v string) {
-	c.Request.Header.Set(k,v)
+func (c *Curl) SetHeader(k, v string) {
+	c.Request.Header.Set(k, v)
 }

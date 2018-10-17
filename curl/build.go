@@ -6,8 +6,8 @@ type Builder interface {
 	SetMethod(method string) Builder
 	SetContentType(contentType string) Builder
 	SetBody(body string) Builder
-	SetHeader(k,v string) Builder
-	AddHeader(k,v string) Builder
+	SetHeader(k, v string) Builder
+	AddHeader(k, v string) Builder
 	Build() ICurl
 }
 
@@ -47,24 +47,22 @@ func (c *CurlBuilder) SetBody(body string) Builder {
 	return c
 }
 
-func (c *CurlBuilder) SetHeader(k,v string) Builder {
+func (c *CurlBuilder) SetHeader(k, v string) Builder {
 	if c.Curl == nil {
 		c.Curl = New()
 	}
-	c.Curl.SetHeader(k,v)
+	c.Curl.SetHeader(k, v)
 	return c
 }
 
-func (c *CurlBuilder) AddHeader(k,v string) Builder {
+func (c *CurlBuilder) AddHeader(k, v string) Builder {
 	if c.Curl == nil {
 		c.Curl = New()
 	}
-	c.Curl.AddHeader(k,v)
+	c.Curl.AddHeader(k, v)
 	return c
 }
 
 func (c *CurlBuilder) Build() ICurl {
 	return c.Curl
 }
-
-
